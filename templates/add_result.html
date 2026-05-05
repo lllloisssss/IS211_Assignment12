@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Add Quiz Result – ClassTrack{% endblock %}
+
+{% block content %}
+<h1>Add Quiz Result</h1>
+
+<div class="card" style="max-width:480px;">
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  {% if not students or not quizzes %}
+    <div class="alert alert-warning">
+      You need at least one student and one quiz before adding results.
+    </div>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+  {% else %}
+  <form method="POST" action="{{ url_for('add_result') }}">
+    <div class="form-group">
+      <label for="student_id">Student</label>
+      <select id="student_id" name="student_id" required>
+        <option value="">— Select a student —</option>
+        {% for s in students %}
+          <option value="{{ s.id }}"
+            {% if request.form.get('student_id') == s.id|string %}selected{% endif %}>
+            {{ s.last_name }}, {{ s.first_name }} (ID: {{ s.id }})
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="quiz_id">Quiz</label>
+      <select id="quiz_id" name="quiz_id" required>
+        <option value="">— Select a quiz —</option>
+        {% for q in quizzes %}
+          <option value="{{ q.id }}"
+            {% if request.form.get('quiz_id') == q.id|string %}selected{% endif %}>
+            {{ q.subject }} – {{ q.quiz_date }} (ID: {{ q.id }})
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="score">Score (0 – 100)</label>
+      <input type="number" id="score" name="score" required min="0" max="100"
+             value="{{ request.form.get('score', '') }}">
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn btn-success">Save Result</button>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Cancel</a>
+    </div>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}
