@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Add Quiz – ClassTrack{% endblock %}
+
+{% block content %}
+<h1>Add Quiz</h1>
+
+<div class="card" style="max-width:480px;">
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form method="POST" action="{{ url_for('add_quiz') }}">
+    <div class="form-group">
+      <label for="subject">Subject</label>
+      <input type="text" id="subject" name="subject" required
+             placeholder="e.g. Python Basics"
+             value="{{ request.form.get('subject', '') }}">
+    </div>
+    <div class="form-group">
+      <label for="num_questions">Number of Questions</label>
+      <input type="number" id="num_questions" name="num_questions" required min="1"
+             value="{{ request.form.get('num_questions', '') }}">
+    </div>
+    <div class="form-group">
+      <label for="quiz_date">Date Given</label>
+      <input type="date" id="quiz_date" name="quiz_date" required
+             value="{{ request.form.get('quiz_date', '') }}">
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn btn-success">Add Quiz</button>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
