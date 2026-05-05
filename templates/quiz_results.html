@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Quiz Results – {{ quiz.subject }}{% endblock %}
+
+{% block content %}
+<h1>Results: {{ quiz.subject }}</h1>
+<p style="margin-bottom:1.5rem; color:#6b7280;">
+  Quiz ID: {{ quiz.id }} &nbsp;|&nbsp;
+  Questions: {{ quiz.num_questions }} &nbsp;|&nbsp;
+  Date: {{ quiz.quiz_date }}
+</p>
+
+<div class="card">
+  {% if not show_names %}
+    <div class="alert alert-info">Viewing anonymized results (student names hidden).</div>
+  {% endif %}
+  {% if results %}
+  <table>
+    <thead>
+      <tr>
+        <th>Student ID</th>
+        {% if show_names %}<th>Name</th>{% endif %}
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in results %}
+      <tr>
+        <td>{{ r.student_id }}</td>
+        {% if show_names %}
+          <td>{{ r.first_name }} {{ r.last_name }}</td>
+        {% endif %}
+        <td>
+          <strong style="color:{% if r.score >= 70 %}#10b981{% else %}#ef4444{% endif %};">
+            {{ r.score }}
+          </strong>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="empty">No results recorded for this quiz yet.</p>
+  {% endif %}
+</div>
+
+{% if session.logged_in %}
+  <a href="{{ url_for('dashboard') }}" class="btn btn-primary">← Back to Dashboard</a>
+{% endif %}
+{% endblock %}
