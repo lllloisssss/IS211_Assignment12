@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ClassTrack{% endblock %}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f6f8; color: #222; min-height: 100vh; }
+
+    nav {
+      background: #1e3a5f; padding: 0 2rem; display: flex;
+      align-items: center; gap: 1.5rem; height: 52px;
+    }
+    .nav-brand { font-size: 1.2rem; font-weight: bold; color: #fff; text-decoration: none; }
+    nav a { color: #93c5fd; text-decoration: none; font-size: .9rem; }
+    nav a:hover { color: #fff; }
+    .nav-right { margin-left: auto; }
+
+    .page { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    h1 { font-size: 1.6rem; margin-bottom: 1.5rem; color: #1e3a5f; border-bottom: 2px solid #1e3a5f; padding-bottom: .5rem; }
+    h2 { font-size: 1.2rem; margin-bottom: 1rem; color: #1e3a5f; }
+
+    .alert { padding: .75rem 1rem; border-radius: 4px; margin-bottom: 1rem; font-size: .9rem; }
+    .alert-success { background: #d1fae5; border-left: 4px solid #10b981; color: #065f46; }
+    .alert-danger  { background: #fee2e2; border-left: 4px solid #ef4444; color: #7f1d1d; }
+    .alert-warning { background: #fef3c7; border-left: 4px solid #f59e0b; color: #78350f; }
+    .alert-info    { background: #dbeafe; border-left: 4px solid #3b82f6; color: #1e3a8a; }
+
+    .card { background: #fff; border: 1px solid #dde1e7; border-radius: 6px; padding: 1.5rem; margin-bottom: 1.5rem; }
+
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    th { background: #1e3a5f; color: #fff; text-align: left; padding: .6rem .9rem; }
+    td { padding: .6rem .9rem; border-bottom: 1px solid #e5e7eb; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f0f4ff; }
+
+    .btn {
+      display: inline-block; padding: .45rem 1rem; border-radius: 4px;
+      font-size: .875rem; font-weight: 600; text-decoration: none;
+      border: none; cursor: pointer; transition: opacity .15s;
+    }
+    .btn:hover { opacity: .85; }
+    .btn-primary { background: #1e3a5f; color: #fff; }
+    .btn-success { background: #10b981; color: #fff; }
+    .btn-danger  { background: #ef4444; color: #fff; }
+    .btn-sm      { padding: .3rem .7rem; font-size: .8rem; }
+
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; font-weight: 600; margin-bottom: .35rem; font-size: .875rem; }
+    input[type=text], input[type=password], input[type=number], input[type=date], select {
+      width: 100%; padding: .5rem .75rem; border: 1px solid #d1d5db;
+      border-radius: 4px; font-size: .9rem; background: #fff;
+    }
+    input:focus, select:focus { outline: 2px solid #3b82f6; border-color: #3b82f6; }
+
+    .actions { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+    .empty { color: #6b7280; font-style: italic; padding: 1rem 0; text-align: center; }
+  </style>
+</head>
+<body>
+
+{% if session.logged_in %}
+<nav>
+  <a class="nav-brand" href="{{ url_for('dashboard') }}">📚 ClassTrack</a>
+  <a href="{{ url_for('dashboard') }}">Dashboard</a>
+  <a href="{{ url_for('add_student') }}">Add Student</a>
+  <a href="{{ url_for('add_quiz') }}">Add Quiz</a>
+  <a href="{{ url_for('add_result') }}">Add Result</a>
+  <span class="nav-right"><a href="{{ url_for('logout') }}">Logout</a></span>
+</nav>
+{% endif %}
+
+<div class="page">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>
