@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}{{ student.first_name }} {{ student.last_name }} – Results{% endblock %}
+
+{% block content %}
+<h1>{{ student.first_name }} {{ student.last_name }}'s Quiz Results</h1>
+<p style="margin-bottom:1.5rem; color:#6b7280;">Student ID: {{ student.id }}</p>
+
+<div class="card">
+  {% if results %}
+  <table>
+    <thead>
+      <tr>
+        <th>Quiz ID</th>
+        <th>Subject</th>
+        <th>Date</th>
+        <th>Score</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in results %}
+      <tr>
+        <td>{{ r.quiz_id }}</td>
+        <td>{{ r.subject }}</td>
+        <td>{{ r.quiz_date }}</td>
+        <td>
+          <strong style="color:{% if r.score >= 70 %}#10b981{% else %}#ef4444{% endif %};">
+            {{ r.score }}
+          </strong>
+        </td>
+        <td>
+          <form method="POST" action="{{ url_for('delete_result', result_id=r.id) }}"
+                onsubmit="return confirm('Delete this result?');">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="empty">No Results</p>
+  {% endif %}
+</div>
+
+<a href="{{ url_for('dashboard') }}" class="btn btn-primary">← Back to Dashboard</a>
+{% endblock %}
